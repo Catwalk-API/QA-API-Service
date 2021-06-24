@@ -54,7 +54,7 @@ var streamData = function() {
     })
 
   }).then((readStream) => {
-    console.log('resumed')
+    console.log('resumed');
     streamData();
   });
 }
