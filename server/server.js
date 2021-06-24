@@ -12,18 +12,14 @@ const client = new Client({
 })
 client.connect()
 
+const fileName = './../csv/questions.csv';
+const filePath = path.join(__dirname, fileName);
+const readStream = fs.createReadStream(filePath, { encoding: 'utf8' });
+let lineRemainder = '';
+
 streamQuestions = () => {
-  const fileName = './../csv/questions.csv';
-  const filePath = path.join(__dirname, fileName);
-
-  const readStream = fs.createReadStream(filePath, { encoding: 'utf8' });
-
-  let count = 0;
-  let lineRemainder = '';
-
   readStream.on('data', (chunk) => {
     readStream.pause();
-    count++;
     let lines = chunk.split('\n');
     lines[0] = lineRemainder + lines[0];
     lineRemainder = lines.pop();
@@ -35,35 +31,30 @@ streamQuestions = () => {
       const product_id = values[1];
       const question_body = values[2];
       const timestamp = Number(values[3]);
+      const dateObject  = new Date(timestamp);
+      const question_date = dateObject.toLocaleString();
       const asker_name = values[4];
       const asker_email = values[5];
       const reported = Boolean(Number(values[6]));
       const question_helpfulness = values[7];
 
-      const dateObject  = new Date(timestamp);
-      const question_date = dateObject.toLocaleString();
+      let sql = `INSERT INTO questions (id, product_id, question_body, question_date, asker_name, asker_email, reported, question_helpfulness) VALUES (${id}, ${product_id}, '${question_body}', '${question_date}', '${asker_name}', '${asker_email}', ${reported}, ${question_helpfulness})`
 
-      console.log(id, product_id, question_body, question_date, asker_name, asker_email, reported, question_helpfulness);
+      client.query(sql, (err, dbResponse) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('response: ', dbResponse);
+        }
+      })
+
+      // console.log(id, product_id, question_body, question_date, asker_name, asker_email, reported, question_helpfulness);
     })
   })
 }
 
+readStream.on('end', () => {
+  console.log('Done uploading');
+})
+
 streamQuestions();
-
-
-
-// readStream.on('end', () => {
-//   console.log(count);
-// })
-
-
-
-  //   // let sql = `INSERT INTO questions (id, product_id, question_body, question_date, asker_name, asker_email, reported, question_helpfulness) VALUES (${id}, ${product_id}, '${question_body}', '${question_date}', '${asker_name}', '${asker_email}', ${reported}, ${question_helpfulness})`
-
-  //   // client.query(sql, (err, dbResponse) => {
-  //   //   if (err) {
-  //   //     console.log(err);
-  //   //   } else {
-  //   //     console.log('response: ', dbResponse);
-  //   //   }
-  //   // })
