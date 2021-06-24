@@ -37,7 +37,7 @@ streamQuestions = () => {
       const timestamp = Number(values[3]);
       const asker_name = values[4];
       const asker_email = values[5];
-      const reported = values[6];
+      const reported = Boolean(Number(values[6]));
       const question_helpfulness = values[7];
 
       const dateObject  = new Date(timestamp);
