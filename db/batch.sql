@@ -20,15 +20,14 @@ CREATE TABLE answers(
   id INT NOT NULL,
   question_id INT NOT NULL,
   answer_body VARCHAR(1000),
-  answer_date TIMESTAMP,
+  answer_date TEXT,
   answerer_name VARCHAR(60),
   answerer_email VARCHAR(60),
-  reported BOOLEAN,
+  reported INT,
   answer_helpfulness INT,
   PRIMARY KEY(id),
-  CONSTRAINT fk_question
-      FOREIGN KEY(question_id)
-	      REFERENCES questions(id)
+  FOREIGN KEY(question_id)
+	  REFERENCES questions(id)
 );
 
 CREATE TABLE photos(
@@ -36,12 +35,21 @@ CREATE TABLE photos(
   answer_id INT NOT NULL,
   photo_url TEXT,
   PRIMARY KEY(id),
-  CONSTRAINT fk_answer
-      FOREIGN KEY(answer_id)
-	      REFERENCES answers(id)
+  FOREIGN KEY(answer_id)
+	  REFERENCES answers(id)
 );
 
--- COPY questions(id, product_id, question_body, question_date, asker_name, asker_email, reported, question_helpfulness)
--- FROM '/var/lib/postgresql/questions.csv'
--- DELIMITER ','
--- CSV HEADER;
+COPY questions(id, product_id, question_body, question_date, asker_name, asker_email, reported, question_helpfulness)
+FROM '/var/lib/postgresql/questions.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY answers(id, question_id, answer_body, answer_date, answerer_name, answerer_email, reported, answer_helpfulness)
+FROM '/var/lib/postgresql/answers.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY photos(id, answer_id, photo_url)
+FROM '/var/lib/postgresql/answers_photos.csv'
+DELIMITER ','
+CSV HEADER;
