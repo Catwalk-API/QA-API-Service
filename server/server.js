@@ -29,19 +29,18 @@ streamQuestions = () => {
     lineRemainder = lines.pop();
     let firstLine = lines[0];
 
-
     lines.forEach((line) => {
       const values = line.split(',');
       const id = values[0];
       const product_id = values[1];
       const question_body = values[2];
-      const unixTimestamp = values[3];
+      const timestamp = Number(values[3]);
       const asker_name = values[4];
       const asker_email = values[5];
       const reported = values[6];
       const question_helpfulness = values[7];
-      const milliseconds = unixTimestamp * 1000;
-      const dateObject = new Date(milliseconds);
+
+      const dateObject  = new Date(timestamp);
       const question_date = dateObject.toLocaleString();
 
       console.log(id, product_id, question_body, question_date, asker_name, asker_email, reported, question_helpfulness);
