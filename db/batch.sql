@@ -5,7 +5,7 @@ CREATE DATABASE questions_answers;
 \c questions_answers;
 
 CREATE TABLE questions(
-  id INT NOT NULL,
+  id serial INT NOT NULL,
   product_id INT,
   question_body VARCHAR(1000),
   question_date TEXT,
@@ -17,7 +17,7 @@ CREATE TABLE questions(
 );
 
 CREATE TABLE answers(
-  id INT NOT NULL,
+  id serial INT NOT NULL,
   question_id INT NOT NULL,
   answer_body VARCHAR(1000),
   answer_date TEXT,
@@ -31,7 +31,7 @@ CREATE TABLE answers(
 );
 
 CREATE TABLE photos(
-  id INT NOT NULL,
+  id serial INT NOT NULL,
   answer_id INT NOT NULL,
   photo_url TEXT,
   PRIMARY KEY(id),
@@ -53,3 +53,9 @@ COPY photos(id, answer_id, photo_url)
 FROM '/var/lib/postgresql/answers_photos.csv'
 DELIMITER ','
 CSV HEADER;
+
+UPDATE questions
+SET question_date = to_timestamp(questions.question_date::numberic/1000);
+
+UPDATE answers
+SET answer_date = to_timestamp(questions.question_date::numberic/1000);

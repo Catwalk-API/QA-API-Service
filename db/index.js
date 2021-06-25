@@ -9,3 +9,14 @@ client.connect( (err) => {
   }
   console.log('Database connection successful')
 })
+
+const listQuestions = (product_id, offset, count) => {
+
+  const sql = `SELECT * from questions WHERE product_id = ${product_id} LIMIT ${count} OFFSET ${offset}`;
+  return client.query(sql);
+
+}
+
+module.exports = {
+  listQuestions,
+}
