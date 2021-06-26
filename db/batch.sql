@@ -11,8 +11,8 @@ CREATE TABLE questions(
   question_date TEXT,
   asker_name VARCHAR(60),
   asker_email VARCHAR(60),
-  reported BOOLEAN,
-  questions_helpfulness INT
+  reported BOOLEAN DEFAULT 'f',
+  questions_helpfulness INT DEFAULT 0
 );
 
 CREATE TABLE answers(
@@ -22,8 +22,8 @@ CREATE TABLE answers(
   answer_date TEXT,
   answerer_name VARCHAR(60),
   answerer_email VARCHAR(60),
-  reported BOOLEAN,
-  answer_helpfulness INT,
+  reported BOOLEAN DEFAULT 'f',
+  answer_helpfulness INT DEFAULT 0,
   FOREIGN KEY(question_id)
 	  REFERENCES questions(question_id)
 );
@@ -56,3 +56,7 @@ SET question_date = to_timestamp(questions.question_date::numeric/1000);
 
 UPDATE answers
 SET answer_date = to_timestamp(answers.answer_date::numeric/1000);
+
+SELECT setval('questions_question_id_seq', (SELECT MAX(question_id) FROM questions));
+SELECT setval('answers_answer_id_seq', (SELECT MAX(answer_id) FROM answers));
+SELECT setval('photos_photo_id_seq', (SELECT MAX(photo_id) FROM photos));

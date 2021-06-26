@@ -1,23 +1,23 @@
 const { Client } = require('pg')
 const pgConfig = require('./config.js');
 
-const client = new Client(pgConfig)
+const client = new Client(pgConfig);
 
 client.connect( (err) => {
   if (err) {
     console.log(err)
   }
   console.log('Database connection successful')
-})
+});
 
-const listQuestions = async (product_id, offset, count) => {
+const listQuestions = async (productId, offset, count) => {
 
   const sql = `
   SELECT q.question_id, q.question_body, q.question_date, q.asker_name, q.questions_helpfulness, q.reported, a.answer_id, a.answer_body, a.answer_date, a.answerer_name, a.answer_helpfulness, p.photo_id, p.answer_id, p.photo_url
   FROM questions q
   LEFT JOIN answers a ON a.question_id = q.question_id
   LEFT JOIN photos p ON p.answer_id = a.answer_id
-  WHERE product_id = ${product_id} AND q.reported = 'f' LIMIT ${count} OFFSET ${offset}
+  WHERE product_id = ${productId} AND q.reported = 'f' LIMIT ${count} OFFSET ${offset}
   `;
 
   let dbRes = await client.query(sql);
@@ -89,19 +89,19 @@ const listQuestions = async (product_id, offset, count) => {
   }
 
   let ret = {
-    'product_id': product_id,
+    'product_id': productId,
     results: resultsArr
   }
 
   return ret;
 
-}
+};
 
-const listAnswers = async (question_id, offset, count) => {
+const listAnswers = async (questionId, offset, count) => {
 
   const sql = `SELECT a.answer_id, a.answer_body, a.answer_date, a.answerer_name, a.answer_helpfulness, p.photo_id, p.answer_id, p.photo_url FROM answers a
   LEFT JOIN photos p ON p.answer_id = a.answer_id
-  WHERE question_id = ${question_id} AND reported = 'f' LIMIT ${count} OFFSET ${offset}`;
+  WHERE question_id = ${questionId} AND reported = 'f' LIMIT ${count} OFFSET ${offset}`;
 
   let dbRes = await client.query(sql);
 
@@ -145,16 +145,52 @@ const listAnswers = async (question_id, offset, count) => {
   }
 
   let ret = {
-    'question_id': question_id,
+    'question_id': questionId,
     results: resultsArr
   }
 
   return ret;
-  // return dbRes;
+
+};
+
+const addQuestion = async (questionBody, askerName, askerEmail, questionDate, prodId) => {
+
+  const sql = `INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email) VALUES (${prodId}, '${questionBody}', '${questionDate}', '${askerName}', '${askerEmail}')`;
+
+  let dbRes = await client.query(sql);
+
+  return dbRes;
+};
+
+const addAnswer = async (answerBody, answererName, answererEmail, answerDate, photos, questionId) => {
+
+  const sql1 = `INSERT INTO answers (question_id, answer_body, answer_date, answerer_name, answerer_email)
+  VALUES (${questionId}, '${answerBody}', '${answerDate}', '${answererName}', '${answererEmail}')`;
+
+  const sql2 = `SELECT answer_id FROM answers WHERE question_id = ${questionId} AND answer_date = '${answerDate}'`;
+
+  client.query(sql1)
+  .then(() => {
+    return client.query(sql2);
+  })
+  .then((dbRes) => {
+    let answerId = dbRes.rows[0].answer_id;
+    photos.forEach( async (photo) => {
+      let sql3 = `INSERT INTO photos (photo_url, answer_id) VALUES ('${photo}', ${answerId})`;
+      dbRes = await client.query(sql3);
+      console.log("INSERTED PHOTO")
+      return dbRes;
+    })
+  })
+  .catch((err) => {
+    return err;
+  })
 
 }
 
 module.exports = {
   listQuestions,
   listAnswers,
-}
+  addQuestion,
+  addAnswer,
+};
