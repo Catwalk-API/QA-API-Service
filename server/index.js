@@ -1,14 +1,14 @@
 const express = require('express');
-const db = require("../db");
-
 const app = express();
-const port = 5000;
-
 app.use(express.json());
+const port = 5000;
 
 app.listen(port, () => {
   console.log(`QA-API server listening at http://localhost:${port}`)
 })
+
+const db = require("../db");
+
 
 // list questions - get - List Questions for product id w/out reported questions
 app.get('/qa/questions', async (req, res) => {

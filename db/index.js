@@ -7,7 +7,7 @@ client.connect( (err) => {
   if (err) {
     console.log(err)
   }
-  console.log('Database connection successful')
+  console.log(`Succesfully connected to database: ${pgConfig.database}`)
 });
 
 const listQuestions = async (productId, offset, count) => {
@@ -233,5 +233,5 @@ module.exports = {
   markQuestionHelpful,
   markAnswerHelpful,
   reportQuestion,
-  reportAnswer,
+  reportAnswer
 };

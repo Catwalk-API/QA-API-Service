@@ -1,16 +1,22 @@
 {
-  "name": "csv",
+  "name": "QA-API-Service",
   "version": "1.0.0",
-  "description": "",
+  "description": "A server router and DB model backend app for serving questions and answers to an ecommerce frontend",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon ./server/index.js"
+    "start": "nodemon ./server/index.js",
+    "test": "jest --testEnvironment jsdom --coverage -- detectOpenHandles"
   },
-  "author": "",
+  "author": "Alex Gaillard",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
     "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "jest": "^27.0.5",
+    "supertest": "^6.1.3"
   }
 }

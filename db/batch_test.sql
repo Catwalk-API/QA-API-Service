@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS qa_sdc;
+DROP DATABASE IF EXISTS qa_test_sdc;
 
-CREATE DATABASE qa_sdc;
+CREATE DATABASE qa_test_sdc;
 
-\c qa_sdc;
+\c qa_test_sdc;
 
 CREATE TABLE questions(
   question_id SERIAL NOT NULL PRIMARY KEY,
@@ -36,20 +36,11 @@ CREATE TABLE photos(
 	  REFERENCES answers(answer_id)
 );
 
-COPY questions(question_id, product_id, question_body, question_date, asker_name, asker_email, reported, questions_helpfulness)
-FROM '/var/lib/postgresql/questions.csv'
-DELIMITER ','
-CSV HEADER;
+INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email) VALUES (1, 'Is this good?', '1624813293323', 'John', 'john@email.com');
 
-COPY answers(answer_id, question_id, answer_body, answer_date, answerer_name, answerer_email, reported, answer_helpfulness)
-FROM '/var/lib/postgresql/answers.csv'
-DELIMITER ','
-CSV HEADER;
+INSERT INTO answers (question_id, answer_body, answer_date, answerer_name, answerer_email) VALUES (1, 'I loved it!','1624813467177', 'Sally', 'sally@email.com');
 
-COPY photos(photo_id, answer_id, photo_url)
-FROM '/var/lib/postgresql/answers_photos.csv'
-DELIMITER ','
-CSV HEADER;
+INSERT INTO photos (answer_id, photo_url) VALUES (1, 'picture.com');
 
 UPDATE questions
 SET question_date = to_timestamp(questions.question_date::numeric/1000);
