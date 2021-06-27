@@ -175,7 +175,7 @@ const addAnswer = async (answerBody, answererName, answererEmail, answerDate, ph
   })
   .then((dbRes) => {
     let answerId = dbRes.rows[0].answer_id;
-    photos.forEach( async (photo) => {
+    return photos.forEach( async (photo) => {
       let sql3 = `INSERT INTO photos (photo_url, answer_id) VALUES ('${photo}', ${answerId})`;
       dbRes = await client.query(sql3);
       console.log("INSERTED PHOTO")
@@ -186,6 +186,43 @@ const addAnswer = async (answerBody, answererName, answererEmail, answerDate, ph
     return err;
   })
 
+};
+
+const markQuestionHelpful = async (questionId) => {
+
+  const sql = `UPDATE questions SET questions_helpfulness = questions_helpfulness + 1 WHERE question_id = ${questionId}`;
+
+  let dbRes = await client.query(sql);
+
+  return dbRes;
+}
+
+const markAnswerHelpful = async (answerId) => {
+
+  const sql = `UPDATE answers SET answer_helpfulness = answer_helpfulness + 1 WHERE answer_id = ${answerId}`;
+
+  let dbRes = await client.query(sql);
+
+  return dbRes;
+
+}
+
+const reportQuestion = async (questionId) => {
+
+  const sql = `UPDATE questions SET reported = 't' WHERE question_id = ${questionId}`;
+
+  let dbRes = await client.query(sql);
+
+  return dbRes;
+}
+
+const reportAnswer = async (answerId) => {
+
+  const sql = `UPDATE answers SET reported = 't' WHERE answer_id = ${answerId}`;
+
+  let dbRes = await client.query(sql);
+
+  return dbRes;
 }
 
 module.exports = {
@@ -193,4 +230,8 @@ module.exports = {
   listAnswers,
   addQuestion,
   addAnswer,
+  markQuestionHelpful,
+  markAnswerHelpful,
+  reportQuestion,
+  reportAnswer,
 };

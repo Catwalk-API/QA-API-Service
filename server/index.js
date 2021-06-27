@@ -104,9 +104,73 @@ app.post('/qa/questions/:question_id/answers', async (req, res) => {
 })
 
 // mark question helpful - put - Updates a question as helpful
+app.put('/qa/questions/:question_id/helpful', async (req, res) => {
+
+  let questionId = req.params.question_id;
+
+  try {
+    const ret = await db.markQuestionHelpful(questionId);
+    res.status(204);
+    res.end();
+  }
+  catch (err) {
+    res.status(400);
+    res.send('Request failed');
+    console.log(err);
+  }
+
+})
 
 // report question - put - Updates questions to show reported
+app.put('/qa/questions/:question_id/report', async (req, res) => {
+
+  let questionId = req.params.question_id;
+
+  try {
+    const ret = await db.reportQuestion(questionId);
+    res.status(204);
+    res.end();
+  }
+  catch (err) {
+    res.status(400);
+    res.send('Request failed');
+    console.log(err);
+  }
+
+})
 
 // mark answer helpful - put - Updates and answer as helpful
+app.put('/qa/answers/:answer_id/helpful', async (req, res) => {
+
+  let answerId = req.params.answer_id;
+
+  try {
+    const ret = await db.markAnswerHelpful(answerId);
+    res.status(204);
+    res.end();
+  }
+  catch (err) {
+    res.status(400);
+    res.send('Request failed');
+    console.log(err);
+  }
+
+})
 
 // report answer - put - Updates answer to show its been reported
+app.put('/qa/answers/:answer_id/report', async (req, res) => {
+
+  let answerId = req.params.answer_id;
+
+  try {
+    const ret = await db.reportAnswer(answerId);
+    res.status(204);
+    res.end();
+  }
+  catch (err) {
+    res.status(400);
+    res.send('Request failed');
+    console.log(err);
+  }
+
+})
