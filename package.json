@@ -2,9 +2,9 @@
   "name": "QA-API-Service",
   "version": "1.0.0",
   "description": "A server router and DB model backend app for serving questions and answers to an ecommerce frontend",
-  "main": "server.js",
+  "main": "./server",
   "scripts": {
-    "start": "nodemon ./server/index.js",
+    "start": "nodemon",
     "test": "jest --testEnvironment jsdom --coverage -- detectOpenHandles"
   },
   "author": "Alex Gaillard",
