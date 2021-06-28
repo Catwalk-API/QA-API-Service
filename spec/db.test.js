@@ -16,11 +16,10 @@ beforeAll(() => {
 
 beforeEach((done) => {
   let sql = `
-  DROP DATABASE IF EXISTS qa_test_sdc;
 
-  CREATE DATABASE qa_test_sdc;
-
-  \c qa_test_sdc;
+  DROP TABLE IF EXISTS photos;
+  DROP TABLE IF EXISTS answers;
+  DROP TABLE IF EXISTS questions;
 
   CREATE TABLE questions(
     question_id SERIAL NOT NULL PRIMARY KEY,
@@ -87,13 +86,16 @@ describe('db unit tests', () => {
     expect(1).toBe(1);
   });
 
-  // it('Should fetch the first entry in the questions table and check that the name matches that inserted by schema above.', async () => {
+  it('Should fetch the first entry in the questions table and check that the name matches that inserted by schema above.', async () => {
 
-  //   let sql = `SELECT name FROM questions WHERE product_id = 1;`
+    let sql = `SELECT * FROM questions WHERE product_id = 1;`
 
-  //   let res = await client.query(sql);
-  //     expect
+    let res = await client.query(sql);
+      expect(res.rows[0].question_body).toBe('Is this good?');
+      expect(res.rows[0].asker_name).toBe('John');
+      expect(res.rows[0].question_date).toBe('2021-06-27 13:01:33.323-04');
+      expect(res.rows[0].asker_email).toBe('john@email.com');
 
-  // })
+  });
 
 })

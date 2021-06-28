@@ -5,7 +5,7 @@
   "main": "./server",
   "scripts": {
     "start": "nodemon",
-    "test": "jest --testEnvironment jsdom --coverage -- detectOpenHandles"
+    "test": "jest spec --testEnvironment jsdom --coverage -- detectOpenHandles"
   },
   "author": "Alex Gaillard",
   "license": "ISC",
