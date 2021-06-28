@@ -86,7 +86,7 @@ describe('db unit tests', () => {
     expect(1).toBe(1);
   });
 
-  it('Should fetch the first entry in the questions table and check that the name matches that inserted by schema above.', async () => {
+  it('Should fetch the first entry in the questions table and check that the values match those inserted by the schema.', async () => {
 
     let sql = `SELECT * FROM questions WHERE product_id = 1;`
 
@@ -95,6 +95,27 @@ describe('db unit tests', () => {
       expect(res.rows[0].asker_name).toBe('John');
       expect(res.rows[0].question_date).toBe('2021-06-27 13:01:33.323-04');
       expect(res.rows[0].asker_email).toBe('john@email.com');
+
+  });
+
+  it('Should fetch the first entry in the answers table and check that the values match those inserted by the schema.', async () => {
+
+    let sql = `SELECT * FROM answers WHERE question_id = 1;`
+
+    let res = await client.query(sql);
+      expect(res.rows[0].answer_body).toBe('I loved it!');
+      expect(res.rows[0].answerer_name).toBe('Sally');
+      expect(res.rows[0].answer_date).toBe('2021-06-27 13:04:27.177-04');
+      expect(res.rows[0].answerer_email).toBe('sally@email.com');
+
+  });
+
+  it('Should fetch the first entry in the photos table and check that the values match those inserted by the schema.', async () => {
+
+    let sql = `SELECT * FROM photos WHERE answer_id = 1;`
+
+    let res = await client.query(sql);
+      expect(res.rows[0].photo_url).toBe('picture.com');
 
   });
 
