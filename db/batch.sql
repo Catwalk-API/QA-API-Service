@@ -57,6 +57,10 @@ SET question_date = to_timestamp(questions.question_date::numeric/1000);
 UPDATE answers
 SET answer_date = to_timestamp(answers.answer_date::numeric/1000);
 
+CREATE INDEX questions_product_id_asc ON questions(product_id ASC);
+CREATE INDEX answers_question_id_asc ON answers(question_id ASC);
+CREATE INDEX photos_answer_id_asc ON photos(answer_id ASC);
+
 SELECT setval('questions_question_id_seq', (SELECT MAX(question_id) FROM questions));
 SELECT setval('answers_answer_id_seq', (SELECT MAX(answer_id) FROM answers));
 SELECT setval('photos_photo_id_seq', (SELECT MAX(photo_id) FROM photos));
