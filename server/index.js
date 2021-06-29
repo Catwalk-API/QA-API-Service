@@ -9,7 +9,6 @@ app.listen(port, () => {
 
 const db = require("../db");
 
-
 // list questions - get - List Questions for product id w/out reported questions
 app.get('/qa/questions', async (req, res) => {
 

@@ -36,7 +36,7 @@ let schema = `
       REFERENCES answers(answer_id)
   );
 
-  INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email) VALUES (1, 'Is this goob?', '1624813293323', 'John', 'john@email.com');
+  INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email) VALUES (1, 'Is this good?', '1624813293323', 'John', 'john@email.com');
 
   INSERT INTO answers (question_id, answer_body, answer_date, answerer_name, answerer_email) VALUES (1, 'I loved it!','1624813467177', 'Sally', 'sally@email.com');
 

@@ -1,7 +1,8 @@
 const request = require("supertest");
 const { app } = require('./../server');
 const { schema } = require('./schema.js')
-const port = 1337;
+let { listAnswers, addQuestion } = require('./../db')
+const port = 5001;
 let server;
 
 const { Client } = require('pg');
@@ -36,18 +37,10 @@ afterAll(() => {
   client.end();
 })
 
-describe ('server unit tests', () => {
+describe ('server and database integration test', () => {
 
   it('Should test Jest connection', () => {
     expect('working').toBe('working');
-  });
-
-  it('Should fetch the first entry in the questions table and check that the values match those inserted by the schema.', async () => {
-
-    let res = await request(app)
-      .get('/qa/questions/?product_id=1')
-      expect(res.body.results[0].question_body).toBe('Is this good?');
-
   });
 
 })
