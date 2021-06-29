@@ -3,3 +3,4 @@ csv
 server_old.js
 config.js
 coverage
+newrelic_agent.log
