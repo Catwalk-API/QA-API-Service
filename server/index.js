@@ -174,3 +174,5 @@ app.put('/qa/answers/:answer_id/report', async (req, res) => {
   }
 
 })
+
+module.exports.app = app;

@@ -2,3 +2,4 @@ node_modules
 csv
 server_old.js
 config.js
+coverage
