@@ -1,0 +1,31 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 50
+      name: Warm up
+    - duration: 120
+      arrivalRate: 50
+      rampTo: 100
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 100
+      rampTo: 1000
+      name: Sustained load
+  payload:
+    path: "./../csv/ids.csv"
+    fields:
+      - "product_id"
+
+scenarios:
+  - name: "Get Questions"
+    flow:
+      - get:
+          url: "/qa/questions"
+          qs:
+            product_id: "{{product_id}}"
+            page: 1
+            count: 5
+
+            # http://localhost:5000/qa/questions?product_id=1&page=1&count=1
