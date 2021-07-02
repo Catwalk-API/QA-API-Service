@@ -1,0 +1,49 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 50
+      name: Warm up
+    - duration: 120
+      arrivalRate: 50
+      rampTo: 100
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 100
+      rampTo: 250
+      name: Sustained load
+  payload:
+    path: "./ids.csv"
+    fields:
+      - "product_id"
+
+scenarios:
+  - name: "Post New Question"
+    flow:
+      - post:
+          url: "/qa/questions"
+          json:
+            product_id: "{{product_id}}"
+            body: "Is this any good?"
+            name: "Chris OCleary"
+            email: "chris@friss.com"
+      - get:
+          url: "/qa/questions"
+          qs:
+            product_id: "{{product_id}}"
+            page: 1
+            count: 5
+          capture:
+            - json: "$.results[0].question_id"
+              as: "questionId"
+      - post:
+          url: "/qa/questions/{{questionId}}/answers"
+          json:
+            body: "Loved it!"
+            name: "Chris OCleary"
+            email: "chris@friss.com"
+            photos: [
+                "http://www.example1.com",
+                "http://www.example2.com"
+            ]

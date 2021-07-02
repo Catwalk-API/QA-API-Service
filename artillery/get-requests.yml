@@ -11,10 +11,10 @@ config:
       name: Ramp up load
     - duration: 600
       arrivalRate: 100
-      rampTo: 1000
+      rampTo: 250
       name: Sustained load
   payload:
-    path: "./../csv/ids.csv"
+    path: "./ids.csv"
     fields:
       - "product_id"
 
@@ -27,5 +27,11 @@ scenarios:
             product_id: "{{product_id}}"
             page: 1
             count: 5
-
-            # http://localhost:5000/qa/questions?product_id=1&page=1&count=1
+          capture:
+            - json: "$.results[0].question_id"
+              as: "questionId"
+      - get:
+          url: "/qa/questions/{{questionId}}/answers"
+          qs:
+            page: 1
+            count: 5

@@ -3,12 +3,23 @@ const pgConfig = require('./config.js');
 
 const client = new Client(pgConfig);
 
-client.connect( (err) => {
-  if (err) {
-    console.log(err)
+async function ConnectToDb() {
+  let retries = 5;
+  while (retries) {
+    try {
+      await client.connect()
+      console.log(`Succesfully connected to database: ${pgConfig.database}`)
+      break;
+    } catch (err) {
+      console.log('error: ', err);
+      retries -= 1;
+      console.log(`retries left: ${retries}`);
+      await new Promise(res => setTimeout(res, 5000));
+    }
   }
-  console.log(`Succesfully connected to database: ${pgConfig.database}`)
-});
+}
+
+ConnectToDb()
 
 const listQuestions = async (productId, offset, count) => {
 
@@ -178,7 +189,6 @@ const addAnswer = async (answerBody, answererName, answererEmail, answerDate, ph
     return photos.forEach( async (photo) => {
       let sql3 = `INSERT INTO photos (photo_url, answer_id) VALUES ('${photo}', ${answerId})`;
       dbRes = await client.query(sql3);
-      console.log("INSERTED PHOTO")
       return dbRes;
     })
   })
